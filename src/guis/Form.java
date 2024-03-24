@@ -10,7 +10,7 @@ public class Form extends JFrame {
         // set the title of the title bar
         super(title);
 
-        // set the size of the gui
+        // set the size of the GUI
         setSize(520, 680);
 
         // configure GUI to end process after closing

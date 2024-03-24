@@ -5,6 +5,8 @@ import constants.CommonConstants;
 import javax.crypto.Cipher;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginFormGUI extends Form {
     public LoginFormGUI() {
@@ -73,9 +75,25 @@ public class LoginFormGUI extends Form {
         loginButton.setBounds(125, 520, 250, 50);
         add(loginButton);
 
+        // create register label (used to load the register GUI)
+        JLabel registerLabel = new JLabel("Not a user? Register Here");
+        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        registerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        registerLabel.setForeground(CommonConstants.TEXT_COLOUR);
 
+        // add functionality so that when clicked it will launch the register form GUI
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // dispose of this GUI
+                LoginFormGUI.this.dispose();
 
+                // launch the register GUI
+                new RegisterFormGUI().setVisible(true);
 
-
+            }
+        });
+        registerLabel.setBounds(125, 600, 250, 30);
+        add(registerLabel);
     }
 }
