@@ -3,6 +3,7 @@ package db;
 import constants.CommonConstants;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.Objects;
 
 // JDBC - Java Database Connectivity
@@ -166,8 +167,55 @@ public class MyJDBC {
     // true - register success
     // false - register failure
 
+    public static boolean register(String username, String password, String firstName, String lastName, String sex, String nationality, Long dateOfBirth,
+                                   String address, Integer telephoneNo, Integer emergencyContactNo, String roleDesignation, Long dateJoined, Long dateLeft,
+                                   Boolean visaStatus, Long visaIssueDate, Long visaExpiryDate, String emiratesIDNo, String healthInsuranceNo, String passportNo){
+        try {
+            // first check if the username already exists in the database
+            if (!checkUser(username)){
+                // connect to the database
+                Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
+                        CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
 
-    public static boolean register(String username, String password){
+                // create insert query
+                PreparedStatement insertUser = connection.prepareStatement(
+                        "INSERT INTO " + CommonConstants.DB_STAFF_TABLE + "(Username, Password, FirstName, lastName, Sex, Nationality, DateOfBirth, " +
+                                "Address, TelephoneNo, EmergencyContactNo, RoleDesignation, DateJoined, DateLeft," +
+                                " VisaStatus, VisaIssueDate, VisaExpiryDate, EmiratesIDNo, HealthInsuranceNo, PassportNo)" +
+                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                );
+
+
+                // insert parameter in the insert query
+                insertUser.setString(1, username);
+                insertUser.setString(2, password);
+                insertUser.setString(3, firstName);
+                insertUser.setString(4, lastName);
+                insertUser.setString(5, sex);
+                insertUser.setString(6, nationality);
+                insertUser.setLong(7, dateOfBirth);
+                insertUser.setString(8, address);
+                insertUser.setInt(9, telephoneNo);
+                insertUser.setInt(10, emergencyContactNo);
+                insertUser.setString(11, roleDesignation);
+                insertUser.setLong(12, dateJoined);
+                insertUser.setLong(13, dateLeft);
+                insertUser.setBoolean(14, visaStatus);
+                insertUser.setLong(15, visaIssueDate);
+                insertUser.setLong(16, visaExpiryDate);
+                insertUser.setString(17, emiratesIDNo);
+                insertUser.setString(18, healthInsuranceNo);
+                insertUser.setString(19, passportNo);
+
+                // update db with new user
+                insertUser.executeUpdate();
+                System.out.println("User registered!");
+                return true;
+
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -191,6 +239,34 @@ public class MyJDBC {
             // if it is empty it means that there was no data row that contains the username
             // (i.e. user does not exist)
             if(!resultSet.isBeforeFirst()){
+                return false;
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return true;
+
+    }
+
+    // validate login credentials by checking to see if username/password pair exists in the database
+    public static boolean validateLogin(String username, String password){
+        try{
+            Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
+                    CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+
+            // create select query
+            PreparedStatement validateUser = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_STAFF_TABLE +
+                            " WHERE USERNAME = ? AND PASSWORD = ?"
+            );
+            validateUser.setString(1, username);
+            validateUser.setString(2, password);
+
+            ResultSet resultSet = validateUser.executeQuery();
+
+            if (!resultSet.isBeforeFirst()){
                 return false;
             }
 
