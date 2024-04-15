@@ -1,5 +1,6 @@
 import db.MyJDBC;
 import guis.LoginFormGUI;
+import guis.RegisterFormGUI;
 
 import javax.swing.*;
 
@@ -9,7 +10,7 @@ public class AppLauncher {
             @Override
             public void run() {
                 // instantiate a LoginForGUI object and make it visible
-                //new LoginFormGUI().setVisible(true);
+                new LoginFormGUI().setVisible(true);
 
                 // check user test
                 //System.out.println(MyJDBC.checkUser("FireBlastG"));
@@ -28,6 +29,10 @@ public class AppLauncher {
 
                 // check validate login test
                 //System.out.println(MyJDBC.validateLogin("FireBlastGaming", "sisnem2016"));
+
+                // test out the results array
+                //System.out.println(RegisterFormGUI.staffResults);
+                //System.out.println(RegisterFormGUI.customerResults);
             }
         });
     }
