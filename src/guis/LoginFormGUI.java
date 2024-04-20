@@ -1,14 +1,15 @@
 package guis;
 
 import constants.CommonConstants;
+import db.MyJDBC;
+import guis.registerPages.RegisterPage0;
 
-import javax.crypto.Cipher;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginFormGUI extends Form {
+public final class LoginFormGUI extends Form {
     public LoginFormGUI() {
         super("Login");
         addGuiComponents();
@@ -73,6 +74,25 @@ public class LoginFormGUI extends Form {
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginButton.setBackground(CommonConstants.TEXT_COLOUR);
         loginButton.setBounds(125, 520, 250, 50);
+        loginButton.addActionListener(e -> {
+            // get username
+            String username = usernameField.getText();
+
+            // get password
+            String password = new String(passwordField.getPassword());
+
+            // check database if the username and password combo is valid
+            if (MyJDBC.validateLogin(username, password)){
+                // login successful
+                JOptionPane.showMessageDialog(this,
+                        "Login Successful!");
+            }
+            else {
+                // login failed
+                JOptionPane.showMessageDialog(this,
+                        "Login Failed...");
+            }
+        });
         add(loginButton);
 
         // create register label (used to load the register GUI)
@@ -89,7 +109,7 @@ public class LoginFormGUI extends Form {
                 LoginFormGUI.this.dispose();
 
                 // launch the register GUI
-                new RegisterFormGUI().setVisible(true);
+                new RegisterPage0().setVisible(true);
 
             }
         });

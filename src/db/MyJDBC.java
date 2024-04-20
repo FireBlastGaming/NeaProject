@@ -73,17 +73,7 @@ public class MyJDBC {
                     " Nationality VARCHAR(50) NOT NULL, " +
                     " DateOfBirth DATE NOT NULL, " +
                     " Address VARCHAR(100) NOT NULL, " +
-                    " TelephoneNo INTEGER NOT NULL, " +
-                    " EmergencyContactNo INTEGER NOT NULL, " +
                     " RoleDesignation VARCHAR(10) NOT NULL, " +
-                    " DateJoined DATE NOT NULL, " +
-                    " DateLeft DATE NOT NULL, " +
-                    " VisaStatus BOOL NOT NULL, " +
-                    " VisaIssueDate DATE NOT NULL, " +
-                    " VisaExpiryDate DATE NOT NULL, " +
-                    " EmiratesIDNo VARCHAR(30) NOT NULL, " +
-                    " HealthInsuranceNo VARCHAR(35) NOT NULL, " +
-                    " PassportNo VARCHAR(35) NOT NULL, " +
                     " PRIMARY KEY(Username))";
 
             createTableQuery.executeUpdate(tableQuery);
@@ -105,8 +95,6 @@ public class MyJDBC {
                     " Password VARCHAR(50) NOT NULL, " +
                     " FirstName VARCHAR(25) NOT NULL, " +
                     " LastName VARCHAR(25) NOT NULL, " +
-                    " Address VARCHAR(100) NOT NULL, " +
-                    " TelephoneNo INTEGER NOT NULL, " +
                     " CompanyName VARCHAR(50) NOT NULL, " +
                     " TaxRegistrationNo VARCHAR(50) NOT NULL, " +
                     " PRIMARY KEY(USERNAME), " +
@@ -167,9 +155,8 @@ public class MyJDBC {
     // true - register success
     // false - register failure
 
-    public static boolean register(String username, String password, String firstName, String lastName, String sex, String nationality, Long dateOfBirth,
-                                   String address, Integer telephoneNo, Integer emergencyContactNo, String roleDesignation, Long dateJoined, Long dateLeft,
-                                   Boolean visaStatus, Long visaIssueDate, Long visaExpiryDate, String emiratesIDNo, String healthInsuranceNo, String passportNo){
+    public static boolean registerStaff(String username, String password, String firstName, String lastName, String sex, String nationality, Date dateOfBirth,
+                                   String address, String roleDesignation){
         try {
             // first check if the username already exists in the database
             if (!checkUser(username)){
@@ -179,12 +166,12 @@ public class MyJDBC {
 
                 // create insert query
                 PreparedStatement insertUser = connection.prepareStatement(
-                        "INSERT INTO " + CommonConstants.DB_STAFF_TABLE + "(Username, Password, FirstName, lastName, Sex, Nationality, DateOfBirth, " +
-                                "Address, TelephoneNo, EmergencyContactNo, RoleDesignation, DateJoined, DateLeft," +
-                                " VisaStatus, VisaIssueDate, VisaExpiryDate, EmiratesIDNo, HealthInsuranceNo, PassportNo)" +
-                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO " + CommonConstants.DB_STAFF_TABLE + "(Username, Password, FirstName, LastName, Sex, Nationality, DateOfBirth, " +
+                                "Address, RoleDesignation)" +
+                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 );
 
+                java.sql.Date sqlDate = new java.sql.Date(dateOfBirth.getTime());
 
                 // insert parameter in the insert query
                 insertUser.setString(1, username);
@@ -193,21 +180,54 @@ public class MyJDBC {
                 insertUser.setString(4, lastName);
                 insertUser.setString(5, sex);
                 insertUser.setString(6, nationality);
-                insertUser.setLong(7, dateOfBirth);
+                insertUser.setDate(7, sqlDate);
                 insertUser.setString(8, address);
-                insertUser.setInt(9, telephoneNo);
-                insertUser.setInt(10, emergencyContactNo);
-                insertUser.setString(11, roleDesignation);
-                insertUser.setLong(12, dateJoined);
-                insertUser.setLong(13, dateLeft);
-                insertUser.setBoolean(14, visaStatus);
-                insertUser.setLong(15, visaIssueDate);
-                insertUser.setLong(16, visaExpiryDate);
-                insertUser.setString(17, emiratesIDNo);
-                insertUser.setString(18, healthInsuranceNo);
-                insertUser.setString(19, passportNo);
+                insertUser.setString(9, roleDesignation);
 
                 // update db with new user
+                insertUser.executeUpdate();
+                System.out.println("User registered!");
+                return true;
+
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean registerCustomer(String username, String password, String firstName, String lastName, String companyName, String taxRegistrationNo, String companyAddress){
+        try {
+            // first check if the username already exists in the database
+            if (!checkUser(username)){
+                // connect to the database
+                Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
+                        CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+
+                // create insert query
+                PreparedStatement insertUser = connection.prepareStatement(
+                        " INSERT INTO " + CommonConstants.DB_CUSTOMERS_TABLE + "(Username, Password, FirstName, LastName, CompanyName, TaxRegistrationNo)" +
+                                "VALUES(?, ?, ?, ?, ?, ?)"
+                );
+
+                PreparedStatement insertCompanyTableStuff = connection.prepareStatement(
+                        " INSERT INTO " + CommonConstants.DB_CLIENT_COMPANIES_TABLE + "(CompanyName, CompanyAddress)" +
+                                "VALUES(?, ?)"
+                );
+
+
+                // insert parameter in the insert query
+                insertCompanyTableStuff.setString(1, companyName);
+                insertCompanyTableStuff.setString(2, companyAddress);
+                insertUser.setString(1, username);
+                insertUser.setString(2, password);
+                insertUser.setString(3, firstName);
+                insertUser.setString(4, lastName);
+                insertUser.setString(5, companyName);
+                insertUser.setString(6, taxRegistrationNo);
+
+                // update db with new user
+                insertCompanyTableStuff.executeUpdate();
                 insertUser.executeUpdate();
                 System.out.println("User registered!");
                 return true;
