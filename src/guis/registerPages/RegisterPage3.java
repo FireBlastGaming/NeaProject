@@ -29,11 +29,14 @@ public class RegisterPage3 extends Form {
     JTextField addressField = new JTextField();
     JButton registerButton = new JButton("Register");
     LoginFormGUI loginFormGUI = new LoginFormGUI();
+    JLabel companyAddressLabel = new JLabel("Company Address:");
+    JTextField companyAddressField = new JTextField();
 
     public static String nationalityText;
     public static Date dateOfBirthDate;
     public static String taxRegistrationNoText;
     public static String addressText;
+    public static String companyAddressText;
 
     public RegisterPage3() {
         super("title");
@@ -111,13 +114,13 @@ public class RegisterPage3 extends Form {
 
         } else {
 
-            // create address label
+            // create tax registration number label
 
             taxRegistrationNoLabel.setBounds(30, 150, 400, 25);
             taxRegistrationNoLabel.setForeground(CommonConstants.TEXT_COLOUR);
             taxRegistrationNoLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
 
-            // create address text field
+            // create tax registration number text field
 
             taxRegistrationNoField.setBounds(30, 185, 450, 55);
             taxRegistrationNoField.setBackground(CommonConstants.SECONDARY_COLOUR);
@@ -126,6 +129,22 @@ public class RegisterPage3 extends Form {
 
             add(taxRegistrationNoLabel);
             add(taxRegistrationNoField);
+
+            // create address label
+
+            companyAddressLabel.setBounds(30, 255, 400, 25);
+            companyAddressLabel.setForeground(CommonConstants.TEXT_COLOUR);
+            companyAddressLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+            // create address text field
+
+            companyAddressField.setBounds(30, 285, 450, 55);
+            companyAddressField.setBackground(CommonConstants.SECONDARY_COLOUR);
+            companyAddressField.setForeground(CommonConstants.TEXT_COLOUR);
+            companyAddressField.setFont(new Font("Dialog", Font.PLAIN, 24));
+
+            add(companyAddressLabel);
+            add(companyAddressField);
         }
 
         // create register button
@@ -146,6 +165,7 @@ public class RegisterPage3 extends Form {
             dateOfBirthDate = dateOfBirthField.getDate();
             taxRegistrationNoText = taxRegistrationNoField.getText();
             addressText = addressField.getText();
+            companyAddressText = companyAddressField.getText();
 
             if (!Objects.equals(RegisterPage0.role, "Customer")) {
                 validP1 = false;
@@ -156,10 +176,10 @@ public class RegisterPage3 extends Form {
                 }
             } else {
                 validP2 = false;
-                if (validationPage3Customer(taxRegistrationNoText)) {
+                if (validationPage3Customer(taxRegistrationNoText, companyAddressText)) {
                     validP2 = true;
                 } else {
-                    JOptionPane.showMessageDialog(this, "It is empty");
+                    JOptionPane.showMessageDialog(this, "One of the two are empty");
                 }
             }
             if (validP1 && validP2) {
@@ -209,11 +229,14 @@ public class RegisterPage3 extends Form {
                     // get companyname
                     String companyName = RegisterPage2.companyNameText;
 
+                    // get companyaddress
+                    String companyAddress = companyAddressText;
+
                     // get taxregistrationno
                     String taxRegistrationNo = taxRegistrationNoText;
 
                     // register user to the database
-                    if (MyJDBC.registerCustomer(username, password, firstName, lastName, companyName, taxRegistrationNo)) {
+                    if (MyJDBC.registerCustomer(username, password, firstName, lastName, companyName, taxRegistrationNo, companyAddress)) {
                         // dispose of this page
                         RegisterPage3.this.dispose();
 
@@ -260,11 +283,11 @@ public class RegisterPage3 extends Form {
         return (!nationality.isEmpty() && dob != null && !address.isEmpty() && dob.before(Calendar.getInstance().getTime()));
     }
 
-    private boolean validationPage3Customer(String taxRegistrationNo) {
+    private boolean validationPage3Customer(String taxRegistrationNo, String companyAddress) {
 
         // all fields must have a value
 
-        return !taxRegistrationNo.isEmpty();
+        return !taxRegistrationNo.isEmpty() && !companyAddress.isEmpty();
     }
 }
 

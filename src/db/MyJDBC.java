@@ -196,7 +196,7 @@ public class MyJDBC {
         return false;
     }
 
-    public static boolean registerCustomer(String username, String password, String firstName, String lastName, String companyName, String taxRegistrationNo){
+    public static boolean registerCustomer(String username, String password, String firstName, String lastName, String companyName, String taxRegistrationNo, String companyAddress){
         try {
             // first check if the username already exists in the database
             if (!checkUser(username)){
@@ -210,8 +210,15 @@ public class MyJDBC {
                                 "VALUES(?, ?, ?, ?, ?, ?)"
                 );
 
+                PreparedStatement insertCompanyTableStuff = connection.prepareStatement(
+                        " INSERT INTO " + CommonConstants.DB_CLIENT_COMPANIES_TABLE + "(CompanyName, CompanyAddress)" +
+                                "VALUES(?, ?)"
+                );
+
 
                 // insert parameter in the insert query
+                insertCompanyTableStuff.setString(1, companyName);
+                insertCompanyTableStuff.setString(2, companyAddress);
                 insertUser.setString(1, username);
                 insertUser.setString(2, password);
                 insertUser.setString(3, firstName);
@@ -220,6 +227,7 @@ public class MyJDBC {
                 insertUser.setString(6, taxRegistrationNo);
 
                 // update db with new user
+                insertCompanyTableStuff.executeUpdate();
                 insertUser.executeUpdate();
                 System.out.println("User registered!");
                 return true;

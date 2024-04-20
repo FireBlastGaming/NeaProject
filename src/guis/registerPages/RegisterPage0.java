@@ -5,6 +5,7 @@ import guis.Form;
 import guis.LoginFormGUI;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,6 +71,12 @@ public final class RegisterPage0 extends Form implements ActionListener {
         staffButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         staffButton.setBackground(CommonConstants.TEXT_COLOUR);
         staffButton.setBounds(30, 185, 450, 55);
+        staffButton.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return CommonConstants.SECONDARY_COLOUR;
+            }
+        });
         add(staffButton);
 
         // create manager button
@@ -79,6 +86,12 @@ public final class RegisterPage0 extends Form implements ActionListener {
         managerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         managerButton.setBackground(CommonConstants.TEXT_COLOUR);
         managerButton.setBounds(30, 285, 450, 55);
+        managerButton.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return CommonConstants.SECONDARY_COLOUR;
+            }
+        });
         add(managerButton);
 
         // create customer button
@@ -88,6 +101,12 @@ public final class RegisterPage0 extends Form implements ActionListener {
         customerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         customerButton.setBackground(CommonConstants.TEXT_COLOUR);
         customerButton.setBounds(30, 395, 450, 55);
+        customerButton.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return CommonConstants.SECONDARY_COLOUR;
+            }
+        });
         add(customerButton);
 
         // create a button group so only one button can be toggled at one time
