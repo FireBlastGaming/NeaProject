@@ -39,7 +39,7 @@ public class RegisterPage3 extends Form {
     public static String companyAddressText;
 
     public RegisterPage3() {
-        super("title");
+        super("Register");
         addPage3GuiComponents();
     }
 

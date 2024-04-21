@@ -1,4 +1,4 @@
-import guis.LoginFormGUI;
+import guis.HomePage;
 
 import javax.swing.*;
 
@@ -6,7 +6,7 @@ public class AppLauncher {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // instantiate a LoginForGUI object and make it visible
-            new LoginFormGUI().setVisible(true);
+            new HomePage().setVisible(true);
 
             // check user test
             //System.out.println(MyJDBC.checkUser("FireBlastG"));

@@ -26,7 +26,7 @@ public class RegisterPage1 extends Form {
 
 
     public RegisterPage1() {
-        super("title");
+        super("Register");
         addPage1GuiComponents();
     }
 

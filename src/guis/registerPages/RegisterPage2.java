@@ -29,7 +29,7 @@ public final class RegisterPage2 extends Form {
 
 
     public RegisterPage2() {
-        super("title");
+        super("Register");
         addPage2GuiComponents();
     }
 

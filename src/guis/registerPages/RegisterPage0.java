@@ -22,7 +22,7 @@ public final class RegisterPage0 extends Form implements ActionListener {
     JToggleButton customerButton = new JToggleButton("Customer");
 
     public RegisterPage0() {
-        super("title");
+        super("Register");
         addPage0GuiComponents();
     }
 
