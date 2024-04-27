@@ -38,12 +38,12 @@ public class Hasher {
             index += 7;
         }
         String result9 = String.join(" ", result6);
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (int i = 0; i < result5.length(); i += 8) {
             int decimal_value = binaryToDecimal(result9.substring(i, 7+i));
-            res += (char)(decimal_value);
+            res.append((char) (decimal_value));
         }
-        return res;
+        return res.toString();
     }
 
     static int binaryToDecimal(String n)
