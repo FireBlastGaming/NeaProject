@@ -3,13 +3,17 @@ package guis;
 import constants.CommonConstants;
 import db.MyJDBC;
 import guis.registerPages.RegisterPage0;
+import guis.registerPages.RegisterPage1;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 public final class LoginFormGUI extends Form {
+
+
     public LoginFormGUI() {
         super("Login");
         addGuiComponents();
@@ -80,12 +84,28 @@ public final class LoginFormGUI extends Form {
 
             // get password
             String password = new String(passwordField.getPassword());
+            String hashedPassword = Hasher.hasher(username, password);
+            String table;
+
+            if (Objects.equals(RegisterPage0.role, "Customer")) {
+                table = "customer";
+            }
+            else {
+                table = "staff";
+            }
 
             // check database if the username and password combo is valid
-            if (MyJDBC.validateLogin(username, password)){
+            if (MyJDBC.validateLogin(username, hashedPassword, table)){
                 // login successful
                 JOptionPane.showMessageDialog(this,
                         "Login Successful!");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException k) {
+                    Thread.currentThread().interrupt();
+                }
+                LoginFormGUI.this.dispose();
+                new HomePage().setVisible(true);
             }
             else {
                 // login failed
@@ -109,8 +129,7 @@ public final class LoginFormGUI extends Form {
                 LoginFormGUI.this.dispose();
 
                 // launch the register GUI
-                new RegisterPage0().setVisible(true);
-
+                new RegisterPage1().setVisible(true);
             }
         });
         registerLabel.setBounds(125, 600, 250, 30);

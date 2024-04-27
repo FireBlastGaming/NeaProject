@@ -2,7 +2,6 @@ package guis.registerPages;
 
 import constants.CommonConstants;
 import guis.Form;
-import guis.LoginFormGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -136,7 +135,7 @@ public class RegisterPage1 extends Form {
                 RegisterPage1.this.dispose();
 
                 // launch the login GUI
-                new LoginFormGUI().setVisible(true);
+                new RegisterPage0("login").setVisible(true);
 
             }
         });

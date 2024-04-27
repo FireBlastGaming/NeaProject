@@ -2,6 +2,7 @@ package db;
 
 import constants.CommonConstants;
 
+import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.Date;
 import java.util.Objects;
@@ -271,21 +272,31 @@ public class MyJDBC {
     }
 
     // validate login credentials by checking to see if username/password pair exists in the database
-    public static boolean validateLogin(String username, String password){
+    public static boolean validateLogin(String username, String password, String table){
         try{
             Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
                     CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
 
             // create select query
-            PreparedStatement validateUser = connection.prepareStatement(
+            PreparedStatement validateStaff = connection.prepareStatement(
                     "SELECT * FROM " + CommonConstants.DB_STAFF_TABLE +
                             " WHERE USERNAME = ? AND PASSWORD = ?"
             );
-            validateUser.setString(1, username);
-            validateUser.setString(2, password);
-
-            ResultSet resultSet = validateUser.executeQuery();
-
+            PreparedStatement validateCustomer = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_CUSTOMERS_TABLE +
+                            " WHERE USERNAME = ? AND PASSWORD = ?"
+            );
+            validateStaff.setString(1, username);
+            validateStaff.setString(2, password);
+            validateCustomer.setString(1, username);
+            validateCustomer.setString(2, password);
+            ResultSet resultSet;
+            if (table == "staff") {
+                resultSet = validateStaff.executeQuery();
+            }
+            else {
+                resultSet = validateCustomer.executeQuery();
+            }
             if (!resultSet.isBeforeFirst()){
                 return false;
             }
@@ -296,5 +307,83 @@ public class MyJDBC {
 
         return true;
 
+    }
+
+    public static DefaultTableModel createTable (String table, DefaultTableModel model){
+        try{
+            Connection connection = DriverManager.getConnection(CommonConstants.DB_URL,
+                    CommonConstants.DB_USERNAME, CommonConstants.DB_PASSWORD);
+
+            // create select query
+            PreparedStatement createStaffTable = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_STAFF_TABLE
+            );
+            PreparedStatement createCustomerTable = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_CUSTOMERS_TABLE
+            );
+
+            PreparedStatement createClientCompaniesTable = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_CLIENT_COMPANIES_TABLE
+            );
+
+            PreparedStatement createStockTable = connection.prepareStatement(
+                    "SELECT * FROM " + CommonConstants.DB_STOCK_TABLE
+            );
+
+
+            if (table == CommonConstants.DB_STAFF_TABLE){
+                ResultSet resultSet = createStaffTable.executeQuery();
+                while(resultSet.next()) {
+                    String u = resultSet.getString("Username");
+                    String p = resultSet.getString("Password");
+                    String f = resultSet.getString("FirstName");
+                    String l = resultSet.getString("LastName");
+                    String s = resultSet.getString("Sex");
+                    String n = resultSet.getString("Nationality");
+                    String d = resultSet.getString("DateOfBirth");
+                    String a = resultSet.getString("Address");
+                    String r = resultSet.getString("RoleDesignation");
+                    model.addRow(new Object[]{u, p, f, l, s, n, d, a, r});
+                }
+
+            } else if (table == CommonConstants.DB_CUSTOMERS_TABLE) {
+                ResultSet resultSet = createCustomerTable.executeQuery();
+                while(resultSet.next()) {
+                    String u = resultSet.getString("Username");
+                    String p = resultSet.getString("Password");
+                    String f = resultSet.getString("FirstName");
+                    String l = resultSet.getString("LastName");
+                    String c = resultSet.getString("CompanyName");
+                    String t = resultSet.getString("TaxRegistrationNo");
+                    model.addRow(new Object[]{u, p, f, l, c, t});
+                }
+
+            } else if (table == CommonConstants.DB_CLIENT_COMPANIES_TABLE) {
+                ResultSet resultSet = createClientCompaniesTable.executeQuery();
+                while(resultSet.next()) {
+                    String c = resultSet.getString("CompanyName");
+                    String cA = resultSet.getString("CompanyAddress");
+                    model.addRow(new Object[]{c, cA});
+                }
+
+            } else{
+                ResultSet resultSet = createStockTable.executeQuery();
+                while(resultSet.next()) {
+                    String m = resultSet.getString("ModelNo");
+                    String b = resultSet.getString("BrandName");
+                    String d = resultSet.getString("Description");
+                    String q = resultSet.getString("Quantity");
+                    String u = resultSet.getString("UnitPrice");
+                    String s = resultSet.getString("AvailableInStore");
+                    String o = resultSet.getString("AvailableInOnline");
+                    String w = resultSet.getString("AvailableInWarehouse");
+                    model.addRow(new Object[]{m, b, d, q, u, s, o, w});
+                }
+            }
+            return model;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return model;
     }
 }
