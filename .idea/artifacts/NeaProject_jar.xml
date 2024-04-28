@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NeaProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NeaProject_jar</output-path>
+    <root id="archive" name="NeaProject.jar">
+      <element id="module-output" name="NeaProject" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jgoodies-looks-2.4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mysql-connector-j-8.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/24.0.0/annotations-24.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcalendar-1.4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
