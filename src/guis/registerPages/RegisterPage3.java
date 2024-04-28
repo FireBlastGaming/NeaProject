@@ -188,7 +188,7 @@ public class RegisterPage3 extends Form {
                 // get username
                 String username = RegisterPage1.usernameText;
                 // get password
-                String password = Hasher.hasher(RegisterPage1.usernameText, RegisterPage1.passwordResult);
+                String password = CaesarCypher.encrypt(Hasher.hasher(RegisterPage1.usernameText, RegisterPage1.passwordResult));
                 // get firstname
                 String firstName = RegisterPage2.firstNameText;
 

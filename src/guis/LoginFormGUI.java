@@ -2,6 +2,7 @@ package guis;
 
 import constants.CommonConstants;
 import db.MyJDBC;
+import guis.registerPages.CaesarCypher;
 import guis.registerPages.RegisterPage0;
 import guis.registerPages.RegisterPage1;
 
@@ -84,7 +85,10 @@ public final class LoginFormGUI extends Form {
 
             // get password
             String password = new String(passwordField.getPassword());
+            // applies a hash to the password
             String hashedPassword = Hasher.hasher(username, password);
+            // applies an encryption to the hashed password
+            String encryptedPassword = CaesarCypher.encrypt(hashedPassword);
             String table;
 
             if (Objects.equals(RegisterPage0.role, "Customer")) {
@@ -95,7 +99,7 @@ public final class LoginFormGUI extends Form {
             }
 
             // check database if the username and password combo is valid
-            if (MyJDBC.validateLogin(username, hashedPassword, table)){
+            if (MyJDBC.validateLogin(username, encryptedPassword, table)){
                 // login successful
                 JOptionPane.showMessageDialog(this,
                         "Login Successful!");
