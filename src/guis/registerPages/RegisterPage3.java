@@ -3,7 +3,9 @@ package guis.registerPages;
 import com.toedter.calendar.JDateChooser;
 import constants.CommonConstants;
 import db.MyJDBC;
+import guis.CaesarCypher;
 import guis.Form;
+import guis.Hasher;
 import guis.LoginFormGUI;
 
 import javax.swing.*;
@@ -39,7 +41,7 @@ public class RegisterPage3 extends Form {
     public static String companyAddressText;
 
     public RegisterPage3() {
-        super("title");
+        super("Register");
         addPage3GuiComponents();
     }
 
@@ -186,10 +188,8 @@ public class RegisterPage3 extends Form {
 
                 // get username
                 String username = RegisterPage1.usernameText;
-
                 // get password
-                String password = RegisterPage1.passwordResult;
-
+                String password = CaesarCypher.encrypt(Hasher.hasher(RegisterPage1.usernameText, RegisterPage1.passwordResult));
                 // get firstname
                 String firstName = RegisterPage2.firstNameText;
 
@@ -268,7 +268,7 @@ public class RegisterPage3 extends Form {
                 RegisterPage3.this.dispose();
 
                 // launch the login GUI
-                new LoginFormGUI().setVisible(true);
+                new RegisterPage0("login").setVisible(true);
 
             }
         });

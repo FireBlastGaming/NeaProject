@@ -11,21 +11,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 public final class RegisterPage0 extends Form implements ActionListener {
 
     public static String role = "";
+    public static String loginRegister;
+    String nameOfString;
+    String text;
 
     // initialize components
     JToggleButton staffButton = new JToggleButton("Staff");
     JToggleButton managerButton = new JToggleButton("Manager");
     JToggleButton customerButton = new JToggleButton("Customer");
 
-    public RegisterPage0() {
-        super("title");
+    public RegisterPage0(String loginOrRegister) {
+        super("Pick A Role");
+        loginRegister = loginOrRegister;
         addPage0GuiComponents();
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == staffButton) {
@@ -47,22 +51,28 @@ public final class RegisterPage0 extends Form implements ActionListener {
 
     private void addPage0GuiComponents () {
         // create register label
-        JLabel registerLabel = new JLabel("Register");
+        if (Objects.equals(loginRegister, "register")) {
+            nameOfString = "Register";
+        }
+        else {
+            nameOfString = "Login";
+        }
+        JLabel titleLabel = new JLabel(nameOfString);
 
         // configure component's x, y position and width/height values relative to the GUI
-        registerLabel.setBounds(0, 25, 520, 100);
+        titleLabel.setBounds(0, 25, 520, 100);
 
         //change the font colour
-        registerLabel.setForeground(CommonConstants.TEXT_COLOUR);
+        titleLabel.setForeground(CommonConstants.TEXT_COLOUR);
 
         // change the font size
-        registerLabel.setFont(new Font("Dialog", Font.BOLD, 40));
+        titleLabel.setFont(new Font("Dialog", Font.BOLD, 40));
 
         // centre text
-        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // add component to GUI
-        add(registerLabel);
+        add(titleLabel);
 
         // create staff button
         staffButton.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -121,7 +131,13 @@ public final class RegisterPage0 extends Form implements ActionListener {
 
 
         // create next page button
-        JButton toPage1Button = new JButton("Next page");
+        if (Objects.equals(loginRegister, "register")) {
+            text = "Register";
+        }
+        else {
+            text = "Login";
+        }
+        JButton toPage1Button = new JButton(text);
         toPage1Button.setFont(new Font("Dialog", Font.BOLD, 18));
 
         // change the cursor to a hand when hover over the button
@@ -136,11 +152,22 @@ public final class RegisterPage0 extends Form implements ActionListener {
             RegisterPage0.this.dispose();
 
             // launch the next page
-            new RegisterPage1().setVisible(true);
+            if (Objects.equals(loginRegister, "register")) {
+                new RegisterPage1().setVisible(true);
+            }
+            else {
+                new LoginFormGUI().setVisible(true);
+            }
         });
 
         // create login label (used to load the login GUI)
-        JLabel loginLabel = new JLabel("Have an account? Login Here");
+        if (Objects.equals(loginRegister, "register")) {
+            text = "Login";
+        }
+        else {
+            text = "Register";
+        }
+        JLabel loginLabel = new JLabel("Have an account? " + text + " Here");
         loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loginLabel.setForeground(CommonConstants.TEXT_COLOUR);
 
@@ -152,7 +179,12 @@ public final class RegisterPage0 extends Form implements ActionListener {
                 RegisterPage0.this.dispose();
 
                 // launch the login GUI
-                new LoginFormGUI().setVisible(true);
+                if (Objects.equals(loginRegister, "login")) {
+                    new RegisterPage0("register").setVisible(true);
+                }
+                else {
+                    new RegisterPage0("login").setVisible(true);
+                }
 
             }
         });

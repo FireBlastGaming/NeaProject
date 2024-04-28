@@ -3,13 +3,19 @@ package guis;
 import constants.CommonConstants;
 import db.MyJDBC;
 import guis.registerPages.RegisterPage0;
+import guis.registerPages.RegisterPage1;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 public final class LoginFormGUI extends Form {
+
+
+    public static String username;
+
     public LoginFormGUI() {
         super("Login");
         addGuiComponents();
@@ -76,16 +82,34 @@ public final class LoginFormGUI extends Form {
         loginButton.setBounds(125, 520, 250, 50);
         loginButton.addActionListener(e -> {
             // get username
-            String username = usernameField.getText();
-
+            username = usernameField.getText();
             // get password
             String password = new String(passwordField.getPassword());
+            // applies a hash to the password
+            String hashedPassword = Hasher.hasher(username, password);
+            // applies an encryption to the hashed password
+            String encryptedPassword = CaesarCypher.encrypt(hashedPassword);
+            String table;
+
+            if (Objects.equals(RegisterPage0.role, "Customer")) {
+                table = "customer";
+            }
+            else {
+                table = "staff";
+            }
 
             // check database if the username and password combo is valid
-            if (MyJDBC.validateLogin(username, password)){
+            if (MyJDBC.validateLogin(username, encryptedPassword, table)){
                 // login successful
                 JOptionPane.showMessageDialog(this,
                         "Login Successful!");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException k) {
+                    Thread.currentThread().interrupt();
+                }
+                LoginFormGUI.this.dispose();
+                new HomePage().setVisible(true);
             }
             else {
                 // login failed
@@ -109,8 +133,7 @@ public final class LoginFormGUI extends Form {
                 LoginFormGUI.this.dispose();
 
                 // launch the register GUI
-                new RegisterPage0().setVisible(true);
-
+                new RegisterPage1().setVisible(true);
             }
         });
         registerLabel.setBounds(125, 600, 250, 30);
