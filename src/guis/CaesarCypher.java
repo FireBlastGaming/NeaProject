@@ -1,4 +1,4 @@
-package guis.registerPages;
+package guis;
 
 public class CaesarCypher {
 
@@ -22,19 +22,4 @@ public class CaesarCypher {
         // returns the encrypted text
         return cypherText.toString();
     }
-    // encase we need it in the future
-//    public static String decrypt (String cypherText){
-//        cypherText = cypherText.toLowerCase();
-//        StringBuilder plainText = new StringBuilder();
-//        for (int i = 0; i < cypherText.length(); i++) {
-//            int charPosition = alphabet.indexOf(cypherText.charAt(i));
-//            int keyValue = (charPosition-15) % 26;
-//            if (keyValue < 0){
-//                keyValue = alphabet.length() + keyValue;
-//            }
-//            char replaceValue = alphabet.charAt(keyValue);
-//            plainText.append(replaceValue);
-//        }
-//        return plainText.toString();
-//    }
 }

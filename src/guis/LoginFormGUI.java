@@ -2,7 +2,6 @@ package guis;
 
 import constants.CommonConstants;
 import db.MyJDBC;
-import guis.registerPages.CaesarCypher;
 import guis.registerPages.RegisterPage0;
 import guis.registerPages.RegisterPage1;
 
@@ -14,6 +13,8 @@ import java.util.Objects;
 
 public final class LoginFormGUI extends Form {
 
+
+    public static String username;
 
     public LoginFormGUI() {
         super("Login");
@@ -81,8 +82,7 @@ public final class LoginFormGUI extends Form {
         loginButton.setBounds(125, 520, 250, 50);
         loginButton.addActionListener(e -> {
             // get username
-            String username = usernameField.getText();
-
+            username = usernameField.getText();
             // get password
             String password = new String(passwordField.getPassword());
             // applies a hash to the password

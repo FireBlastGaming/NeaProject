@@ -10,6 +10,7 @@ public class AppLauncher {
 
             String loginOrRegister = "login";
             new RegisterPage0(loginOrRegister).setVisible(true);
+            //new HomePage().setVisible(true);
 
             // check user test
             //System.out.println(MyJDBC.checkUser("FireBlastG"));

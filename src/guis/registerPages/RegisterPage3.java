@@ -3,6 +3,7 @@ package guis.registerPages;
 import com.toedter.calendar.JDateChooser;
 import constants.CommonConstants;
 import db.MyJDBC;
+import guis.CaesarCypher;
 import guis.Form;
 import guis.Hasher;
 import guis.LoginFormGUI;
